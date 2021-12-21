@@ -1,6 +1,6 @@
 {
   "name": "dfpwm",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "description": "DFPWM encoder/decoder for JavaScript. Useful for ComputerCraft.",
   "main": "index.js",
   "scripts": {
@@ -15,5 +15,6 @@
   ],
   "author": "JackMacWindows",
   "license": "MIT",
-  "repository": "github:MCJack123/node-dfpwm"
+  "repository": "github:MCJack123/node-dfpwm",
+  "types": "index.d.ts"
 }

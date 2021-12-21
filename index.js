@@ -82,7 +82,7 @@ class Decoder {
     }
     /**
      * Encodes a buffer of 1-bit DFPWM data to 8-bit signed PCM.
-     * @param {Buffer} buffer The DFPWM buffer to encode.
+     * @param {Buffer} buffer The DFPWM buffer to decode.
      * @param {number?} fs
      * @returns {Buffer} The resulting PCM data.
      */
@@ -131,12 +131,23 @@ class Decoder {
     }
 }
 
+/**
+ * Quickly encodes a single chunk of PCM audio to DFPWM.
+ * @param {Buffer} buffer The PCM buffer to encode.
+ * @returns {Buffer} The resulting DFPWM data.
+ */
 function encode(data) {
     return (new Encoder()).encode(data);
 }
 
-function decode(data, fq) {
-    return (new Decoder()).decode(data, fq);
+/**
+ * Quickly decodes a single chunk of DFPWM audio to PCM.
+ * @param {Buffer} buffer The DFPWM buffer to decode.
+ * @param {number?} fs
+ * @returns {Buffer} The resulting PCM data.
+ */
+function decode(data, fs) {
+    return (new Decoder()).decode(data, fs);
 }
 
 module.exports = {
