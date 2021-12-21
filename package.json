@@ -1,0 +1,19 @@
+{
+  "name": "dfpwm",
+  "version": "1.0.1",
+  "description": "DFPWM encoder/decoder for JavaScript. Useful for ComputerCraft.",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "dfpwm",
+    "audio",
+    "encoding",
+    "decoding",
+    "computercraft"
+  ],
+  "author": "JackMacWindows",
+  "license": "MIT",
+  "repository": "github:MCJack123/node-dfpwm"
+}
