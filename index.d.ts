@@ -1,6 +1,7 @@
 import {Buffer} from 'buffer';
+import {Transform} from 'stream';
 
-export class Encoder {
+export class Encoder extends Transform {
     q: number;
     s: number;
     t: number;
@@ -11,6 +12,7 @@ export class Encoder {
      * @param {number?} lt
      */
     constructor(q?: number, s?: number, lt?: number);
+
     /**
      * Encodes a buffer of 8-bit signed PCM data to 1-bit DFPWM.
      * @param {Buffer} buffer The PCM buffer to encode.
@@ -19,7 +21,7 @@ export class Encoder {
     encode(buffer: Buffer): Buffer;
 }
 
-export class Decoder {
+export class Decoder extends Transform {
     fq: number;
     q: number;
     s: number;
@@ -32,6 +34,7 @@ export class Decoder {
      * @param {number?} lt
      */
     constructor(fq?: number, q?: number, s?: number, lt?: number);
+
     /**
      * Encodes a buffer of 1-bit DFPWM data to 8-bit signed PCM.
      * @param {Buffer} buffer The DFPWM buffer to encode.
@@ -47,6 +50,7 @@ export class Decoder {
  * @returns {Buffer} The resulting DFPWM data.
  */
 export function quickEncode(data: Buffer): Buffer;
+
 /**
  * Quickly decodes a single chunk of DFPWM audio to PCM.
  * @param {Buffer} buffer The DFPWM buffer to decode.

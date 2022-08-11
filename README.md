@@ -18,9 +18,14 @@ let decodedData = decoder.decode(encodedData); // decode data to PCM
 // or do single chunks quicker: (not recommended for streaming data)
 let encodedData = dfpwm.quickEncode(pcmData);
 let decodedData = dfpwm.quickDecode(encodedData);
+
+// use streams to streamline data access
+fs.createReadStream("in.pcm", {encoding: "buffer"})
+    .pipe(new dfpwm.Encoder())
+    .pipe(fs.createWriteStream("out.dfpwm", {encoding: "buffer"}))
 ```
 
 Encoders and decoders may be re-used for streaming audio. This helps keep audio quality better across multiple chunks.
 
 ## License
-This library is licensed under the MIT license.
+This library is licensed under the MIT license. The original DFPWM1a encoder is licensed in the public domain.

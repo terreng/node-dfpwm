@@ -1,11 +1,12 @@
 const {Buffer} = require("buffer");
+const {Transform} = require("stream");
 
 const CONST_PREC = 10;
 const CONST_POSTFILT = 140;
 
 // DFPWM transcoder from https://github.com/ChenThread/dfpwm/blob/master/1a/
 
-class Encoder {
+class Encoder extends Transform {
     /**
      * Creates a new encoder.
      * @param {number?} q
@@ -13,6 +14,7 @@ class Encoder {
      * @param {number?} lt
      */
     constructor(q, s, lt) {
+        super();
         if (q !== undefined && q !== null && typeof q !== "number") throw TypeError("Argument #1 must be a number.");
         if (s !== undefined && s !== null && typeof s !== "number") throw TypeError("Argument #2 must be a number.");
         if (lt !== undefined && lt !== null && typeof lt !== "number") throw TypeError("Argument #3 must be a number.");
@@ -60,9 +62,14 @@ class Encoder {
         }
         return output;
     }
+
+    _transform(chunk, encoding, callback) {
+        if (encoding !== "buffer") throw new Error("invalid stream encoding");
+        callback(null, encode(chunk));
+    }
 }
 
-class Decoder {
+class Decoder extends Transform {
     /**
      * Creates a new decoder.
      * @param {number?} fq
@@ -71,6 +78,7 @@ class Decoder {
      * @param {number?} lt
      */
     constructor(fq, q, s, lt) {
+        super();
         if (fq !== undefined && fq !== null && typeof fq !== "number") throw TypeError("Argument #1 must be a number.");
         if (q !== undefined && q !== null && typeof q !== "number") throw TypeError("Argument #2 must be a number.");
         if (s !== undefined && s !== null && typeof s !== "number") throw TypeError("Argument #3 must be a number.");
@@ -128,6 +136,11 @@ class Decoder {
             }
         }
         return output;
+    }
+
+    _transform(chunk, encoding, callback) {
+        if (encoding !== "buffer") throw new Error("invalid stream encoding");
+        callback(null, decode(chunk));
     }
 }
 
