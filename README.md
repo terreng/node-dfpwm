@@ -20,9 +20,9 @@ let encodedData = dfpwm.quickEncode(pcmData);
 let decodedData = dfpwm.quickDecode(encodedData);
 
 // use streams to streamline data access
-fs.createReadStream("in.pcm", {encoding: "buffer"})
+fs.createReadStream("in.pcm")
     .pipe(new dfpwm.Encoder())
-    .pipe(fs.createWriteStream("out.dfpwm", {encoding: "buffer"}))
+    .pipe(fs.createWriteStream("out.dfpwm"))
 ```
 
 Encoders and decoders may be re-used for streaming audio. This helps keep audio quality better across multiple chunks.
