@@ -29,3 +29,24 @@ Encoders and decoders may be re-used for streaming audio. This helps keep audio 
 
 ## License
 This library is licensed under the MIT license. The original DFPWM1a encoder is licensed in the public domain.
+
+## Changelog
+
+### 1.2.0
+- Added `final` argument to `Encoder.encode` to write out the last bits that don't fit in a single byte.
+- Fixed encoding multiple chunks with a size not divisible by 8.
+
+### 1.1.1
+- Adjusted encoding to fit better with DFPWM1a spec.
+
+### 1.1.0
+- `Encoder`/`Decoder` now extend from `stream.Transform`, allowing them to be used in `Stream.pipe`.
+
+### 1.0.2
+- Added TypeScript typings.
+
+### 1.0.1
+- Added readme.
+
+### 1.0.0
+- Initial release.

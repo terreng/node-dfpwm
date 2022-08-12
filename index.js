@@ -21,20 +21,26 @@ class Encoder extends Transform {
         this.q = q || 0;
         this.s = s || 0;
         this.lt = lt || -128;
+        this.pending = null;
     }
     /**
      * Encodes a buffer of 8-bit signed PCM data to 1-bit DFPWM.
      * @param {Buffer} buffer The PCM buffer to encode.
+     * @param {boolean?} final Whether this is the last chunk.
      * @returns {Buffer} The resulting DFPWM data.
      */
-    encode(buffer) {
+    encode(buffer, final) {
         if (!(buffer instanceof Buffer)) throw TypeError("Argument #1 must be a Buffer.");
-        let d = 0;
-        let output = Buffer.alloc(Math.ceil(buffer.length / 8));
-        for (let i = 0; i < Math.floor(buffer.length / 8); i++) {
-            for (let j = 0; j < 8; j++) {
+        let buf = buffer;
+        if (this.pending) buf = Buffer.concat([this.pending, buffer]);
+        if (buf.length % 8 < 1) final = false;
+        const len = (final ? Math.ceil : Math.floor)(buf.length / 8);
+        let output = Buffer.alloc(len);
+        for (let i = 0; i < len; i++) {
+            let d = 0;
+            for (let j = 0; j < (final && i === len - 1 ? buf.length % 8 : 8); j++) {
                 // get sample
-                let v = buffer.readInt8(i*8+j);
+                let v = buf.readInt8(i*8+j);
                 // set bit / target
                 let t = (v > this.q || (v === this.q && v === 127) ? 127 : -128);
                 d >>= 1;
@@ -56,14 +62,21 @@ class Encoder extends Transform {
             }
 
             // output bits
+            if (final && i === len - 1) d >>= 8 - (buf.length % 8);
             output.writeUInt8(d, i);
         }
+        if (!final && buf.length % 8 > 0) this.pending = buf.subarray(-(buf.length % 8));
+        else this.pending = null;
         return output;
     }
 
     _transform(chunk, encoding, callback) {
-        if (encoding !== "buffer") throw new Error("invalid stream encoding");
-        callback(null, encode(chunk));
+        callback(null, this.encode(chunk));
+    }
+
+    _flush(callback) {
+        console.log(this.pending && this.pending.length)
+        if (this.pending !== null) callback(null, this.encode(Buffer.alloc(0), true));
     }
 }
 
@@ -137,7 +150,6 @@ class Decoder extends Transform {
     }
 
     _transform(chunk, encoding, callback) {
-        if (encoding !== "buffer") throw new Error("invalid stream encoding");
         callback(null, decode(chunk));
     }
 }
@@ -148,7 +160,7 @@ class Decoder extends Transform {
  * @returns {Buffer} The resulting DFPWM data.
  */
 function encode(data) {
-    return (new Encoder()).encode(data);
+    return (new Encoder()).encode(data, true);
 }
 
 /**

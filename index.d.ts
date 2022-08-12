@@ -16,9 +16,10 @@ export class Encoder extends Transform {
     /**
      * Encodes a buffer of 8-bit signed PCM data to 1-bit DFPWM.
      * @param {Buffer} buffer The PCM buffer to encode.
+     * @param {boolean?} final Whether this is the last chunk.
      * @returns {Buffer} The resulting DFPWM data.
      */
-    encode(buffer: Buffer): Buffer;
+    encode(buffer: Buffer, final?: boolean): Buffer;
 }
 
 export class Decoder extends Transform {
