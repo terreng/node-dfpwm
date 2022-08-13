@@ -32,7 +32,10 @@ This library is licensed under the MIT license. The original DFPWM1a encoder is 
 
 ## Changelog
 
-### 1.2.0
+### 1.2.2
+- Fixed an accidental debugging statement.
+
+### 1.2.1
 - Added `final` argument to `Encoder.encode` to write out the last bits that don't fit in a single byte.
 - Fixed encoding multiple chunks with a size not divisible by 8.
 

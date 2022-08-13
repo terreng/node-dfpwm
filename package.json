@@ -1,6 +1,6 @@
 {
   "name": "dfpwm",
-  "version": "1.2.0",
+  "version": "1.2.2",
   "description": "DFPWM encoder/decoder for JavaScript. Useful for ComputerCraft.",
   "main": "index.js",
   "scripts": {
