@@ -75,7 +75,11 @@ class Encoder extends Transform {
     }
 
     _flush(callback) {
-        if (this.pending !== null) callback(null, this.encode(Buffer.alloc(0), true));
+        if (this.pending !== null) {
+            this.push(this.encode(Buffer.alloc(0), true));
+            this.pending = null;
+        }
+        callback();
     }
 }
 
